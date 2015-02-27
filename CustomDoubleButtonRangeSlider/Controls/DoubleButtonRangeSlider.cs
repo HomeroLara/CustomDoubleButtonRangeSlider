@@ -75,6 +75,8 @@ namespace CustomDoubleButtonRangeSlider.Controls
         private int _deadBand = 5;
         private bool _isLeftButtonBeingPressed = false;
         private bool _isRightButtonBeingPressed = false;
+
+        private int _screenWidth = 0;
         #endregion
 
         #region PUBLIC MEMBERS
@@ -250,38 +252,39 @@ namespace CustomDoubleButtonRangeSlider.Controls
                 var width = Width - (this._leftButtonImage.Width + this._rightButtonImage.Width);
                 this._step = Math.Round((decimal)width / (this._sliderMaxValue - this._sliderMinValue));
             }
+
+            if (_screenWidth == 0)
+            {
+                switch (this._sliderMode)
+                {
+                    case RangeSliderMode.RIGHTMODEONLY:
+                        _screenWidth = (Width - this._rightButtonImage.Width);
+                        break;
+                    case RangeSliderMode.LEFTMODEONLY:
+                        _screenWidth = (Width - this._leftButtonImage.Width);
+                        break;
+                    case RangeSliderMode.DUALMODE:
+                    default:
+                        _screenWidth = Width - (this._leftButtonImage.Width + this._rightButtonImage.Width);
+                        break;
+                }
+            }
         }
 
         public void DrawButtons()
         {
-            int width = 0;
-
-            switch (this._sliderMode)
-            {
-                case RangeSliderMode.RIGHTMODEONLY:
-                    width = (Width - this._rightButtonImage.Width);
-                    break;
-                case RangeSliderMode.LEFTMODEONLY:
-                    width = (Width - this._leftButtonImage.Width);
-                    break;
-                case RangeSliderMode.DUALMODE:
-                default:
-                    width = Width - (this._leftButtonImage.Width + this._rightButtonImage.Width);
-                    break;
-            }
-
             //if no starting point is provided
             if (this._leftButtonX <= 0)
             {
                 var leftButtonStartValue = Decimal.Divide(this._leftButtonStartValue, 100);
-                this._leftButtonX = (int)(leftButtonStartValue * width);
+                this._leftButtonX = (int)(leftButtonStartValue * _screenWidth);
             }
 
             //if no starting point is provided
             if (this._rightButtonX <= 0)
             {
                 var rightButtonStartValue = Decimal.Divide(this._rightButtonStartValue, 100);
-                this._rightButtonX = (int)(rightButtonStartValue * width);
+                this._rightButtonX = (int)(rightButtonStartValue * _screenWidth);
             }
 
             this._canvas.DrawBitmap(this._sliderBarActiveScaled, 0, 55, new Paint() );
@@ -529,7 +532,7 @@ namespace CustomDoubleButtonRangeSlider.Controls
         /// writes output the the Debug Output Window when ever a user touches the one of the buttons
         /// </summary>
         /// <param name="log"></param>
-        private void _DebugInfo_old(string log)
+        private void _DebugInfo_(string log)
         {
             try
             {
