@@ -299,7 +299,7 @@ namespace CustomDoubleButtonRangeSlider.Controls
                     this._canvas.DrawBitmap(this._rightButtonImage, this._rightButtonX, 0, this._paint);
 
                     //draw the right textView @ center of right button
-                    startingRightButtonTextX = XRightButtonPosition(this._textPaint, this._rightButtonImage, this._rightButtonX, rightButtonValue);
+                    startingRightButtonTextX = XRightButtonPosition(this._textPaint, this._rightButtonImage, this._rightButtonX);
 
                     rightButtonValue = string.Format("{0}{1}", this._rightButtonValue.ToString(), "\u00B0");
                     this._canvas.DrawText(rightButtonValue, startingRightButtonTextX, Scale(35f, Android.Util.ComplexUnitType.Dip), this._textPaint);
@@ -309,7 +309,7 @@ namespace CustomDoubleButtonRangeSlider.Controls
                     this._canvas.DrawBitmap(this._leftButtonImage, this._leftButtonX - this._leftButtonImage.Width, 0, this._paint);
 
                     //draw the left textView @ center of left button
-                    startingLeftButtonTextX = XLeftButtonPosition(this._textPaint, this._leftButtonImage, this._leftButtonX, leftButtonValue);
+                    startingLeftButtonTextX = XLeftButtonPosition(this._textPaint, this._leftButtonImage, this._leftButtonX);
 
                     leftButtonValue = string.Format("{0}{1}", this._leftButtonValue.ToString(), "\u00B0");
                     this._canvas.DrawText(leftButtonValue, startingLeftButtonTextX, Scale(35f, Android.Util.ComplexUnitType.Dip), this._textPaint);
@@ -324,12 +324,12 @@ namespace CustomDoubleButtonRangeSlider.Controls
                     rightButtonValue = string.Format("{0}{1}", this._rightButtonValue.ToString(), "\u00B0");
 
                     //draw the left textView @ center of left button
-                    startingLeftButtonTextX = XLeftButtonPosition(this._textPaint, this._leftButtonImage, this._leftButtonX, leftButtonValue);
+                    startingLeftButtonTextX = XLeftButtonPosition(this._textPaint, this._leftButtonImage, this._leftButtonX);
                     //this._canvas.DrawText(leftButtonValue, startingLeftButtonTextX, Scale(this._isLeftButtonBeingPressed ? 10f : 28f, Android.Util.ComplexUnitType.Dip), this._textPaint);
                     this._canvas.DrawText(leftButtonValue, startingLeftButtonTextX, Scale(35f, Android.Util.ComplexUnitType.Dip), this._textPaint);
 
                     //draw the right textView @ center of right button
-                    startingRightButtonTextX = XRightButtonPosition(this._textPaint, this._rightButtonImage, this._rightButtonX, rightButtonValue);
+                    startingRightButtonTextX = XRightButtonPosition(this._textPaint, this._rightButtonImage, this._rightButtonX);
                     this._canvas.DrawText(rightButtonValue, startingRightButtonTextX, Scale(35f, Android.Util.ComplexUnitType.Dip), this._textPaint);
                     break;
             }
@@ -353,7 +353,7 @@ namespace CustomDoubleButtonRangeSlider.Controls
         /// <param name="currentPosition"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private float XRightButtonPosition(Paint paint, Bitmap bitMap, int currentPosition, string value)
+        private float XRightButtonPosition(Paint paint, Bitmap bitMap, int currentPosition)
         {
             var textWidthMedian = paint.MeasureText(this._rightButtonValue.ToString()) / 2;
             var bitMapMedian = bitMap.Width / 2;
@@ -368,7 +368,7 @@ namespace CustomDoubleButtonRangeSlider.Controls
         /// <param name="currentPosition"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private float XLeftButtonPosition(Paint paint, Bitmap bitMap, int currentPosition, string value)
+        private float XLeftButtonPosition(Paint paint, Bitmap bitMap, int currentPosition)
         {
             var textWidthMedian = paint.MeasureText(this._leftButtonValue.ToString()) / 2;
             var bitMapMedian = bitMap.Width / 2;
@@ -451,25 +451,47 @@ namespace CustomDoubleButtonRangeSlider.Controls
             //then both buttons move in the direction of the user's swipe 
             if (this._selectedButton == SelectedButton.RIGHT)
             {
-                if (this._rightButtonX > Width - this._rightButtonImage.Width)
-                    this._rightButtonX = (Width - this._rightButtonImage.Width);
+                if (this._sliderMode == RangeSliderMode.DUALMODE)
+                {
+                    if (this._rightButtonX > Width - this._rightButtonImage.Width)
+                        this._rightButtonX = (Width - this._rightButtonImage.Width);
 
-                if (this._rightButtonX <= this._leftButtonImage.Width + this._deadBand + this._minwindow)
-                    this._rightButtonX = (this._leftButtonImage.Width + this._deadBand + this._minwindow);
+                    if (this._rightButtonX <= this._leftButtonImage.Width + this._deadBand + this._minwindow)
+                        this._rightButtonX = (this._leftButtonImage.Width + this._deadBand + this._minwindow);
 
-                if (this._rightButtonX <= this._leftButtonX + this._minwindow)
-                    this._leftButtonX = (this._rightButtonX - this._deadBand - this._minwindow);
+                    if (this._rightButtonX <= this._leftButtonX + this._minwindow)
+                        this._leftButtonX = (this._rightButtonX - this._deadBand - this._minwindow);
+                }
+                else
+                {
+                    if (this._rightButtonX > Width - this._rightButtonImage.Width)
+                        this._rightButtonX = (Width - this._rightButtonImage.Width);
+
+                    if (this._rightButtonX <= this._deadBand + this._minwindow)
+                        this._rightButtonX = (this._deadBand + this._minwindow);
+                }
             }
             else if (this._selectedButton == SelectedButton.LEFT)
             {
-                if (this._leftButtonX < this._leftButtonImage.Width)
-                    this._leftButtonX = this._leftButtonImage.Width;
+                if (this._sliderMode == RangeSliderMode.DUALMODE)
+                {
+                    if (this._leftButtonX < this._leftButtonImage.Width)
+                        this._leftButtonX = this._leftButtonImage.Width;
 
-                if (this._leftButtonX >= Width - (this._rightButtonImage.Width + this._minwindow))
-                    this._leftButtonX = Width - (this._rightButtonImage.Width + this._minwindow);
+                    if (this._leftButtonX >= Width - (this._rightButtonImage.Width + this._minwindow))
+                        this._leftButtonX = Width - (this._rightButtonImage.Width + this._minwindow);
 
-                if (this._leftButtonX > this._rightButtonX - this._minwindow)
-                    this._rightButtonX = this._leftButtonX + this._deadBand + this._minwindow;
+                    if (this._leftButtonX > this._rightButtonX - this._minwindow)
+                        this._rightButtonX = this._leftButtonX + this._deadBand + this._minwindow;
+                }
+                else
+                {
+                    if (this._leftButtonX < this._leftButtonImage.Width)
+                        this._leftButtonX = this._leftButtonImage.Width;
+
+                    if (this._leftButtonX >= (Width - this._minwindow))
+                        this._leftButtonX = (Width - this._minwindow);
+                }
             }
 
             Invalidate();

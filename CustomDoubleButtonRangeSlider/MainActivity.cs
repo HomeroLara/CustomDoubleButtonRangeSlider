@@ -61,7 +61,7 @@ namespace CustomDoubleButtonRangeSlider
             rangeSliderTableLayout.AddView(tableRowRangeSliders);
 
             tableRowRangeSliders = new TableRow(this);
-            tableRowRangeSliders.AddView(CreateRangeSlider(2, 0, 27, 100, 0, 0, 31, 100, 0, false, RangeSliderMode.RIGHTMODEONLY, leftButtonImageScalesd, rightButtonImageScalesd));
+            tableRowRangeSliders.AddView(CreateRangeSlider(2, 0, 27, 100, 0, 0, 31, 100, 0, true, RangeSliderMode.RIGHTMODEONLY, leftButtonImageScalesd, rightButtonImageScalesd));
             rangeSliderTableLayout.AddView(tableRowRangeSliders);
 
             return rangeSliderTableLayout;
