@@ -49,6 +49,7 @@ namespace CustomDoubleButtonRangeSlider.Controls
         private Bitmap _sliderBarActiveScaled = null;
         private bool _enabledSlider = true;
 
+        private int _id = 0;
         private int _sliderMinValue = 0;
         private int _sliderMaxValue = 100;
         private int _scaleStartValue;
@@ -80,6 +81,11 @@ namespace CustomDoubleButtonRangeSlider.Controls
         #endregion
 
         #region PUBLIC MEMBERS
+        public int RangeSliderId
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
         public bool FullStep
         {
             get { return _fullStep; }
@@ -441,11 +447,12 @@ namespace CustomDoubleButtonRangeSlider.Controls
             }
 
             Invalidate();
+
             if (this._rangeBarChangeListener != null)
             {
                 GetButtonValues();
                 //set listener at these particular points
-                this._rangeBarChangeListener.SeekBarValueChanged(this._leftButtonValue, this._leftButtonX, this._rightButtonValue, this._rightButtonX);
+                this._rangeBarChangeListener.SeekBarValueChanged(this._id, this._leftButtonValue, this._leftButtonX, this._rightButtonValue, this._rightButtonX);
             }
             return true;
         }
@@ -507,6 +514,6 @@ namespace CustomDoubleButtonRangeSlider.Controls
     //this interface will need to be implemented in the activity that is calling the DoublebuttonRangeSlider
     public interface DoubleButtonRangeSliderChangeListener
     {
-        void SeekBarValueChanged(decimal leftButtonValue, int leftButtonX, decimal rightButtonValue, int rightButtontX);
+        void SeekBarValueChanged(int id,  decimal leftButtonValue, int leftButtonX, decimal rightButtonValue, int rightButtontX);
     }
 }

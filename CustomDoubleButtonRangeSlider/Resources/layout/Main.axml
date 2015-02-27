@@ -7,5 +7,25 @@
         android:id="@+id/rangeSliderLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#1f1f1f" />
+        android:layout_marginTop="0dp"
+        android:background="#1f1f1f">
+        <TextView
+            android:id="@+id/textViewRangeSliderId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:textColor="#ffffff" />
+        <TextView
+            android:id="@+id/textViewleftButtonValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="230dp"
+            android:textColor="#ffffff" />
+        <TextView
+            android:id="@+id/textViewRightButtonValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="260dp"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
 </LinearLayout>

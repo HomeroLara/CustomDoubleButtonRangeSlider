@@ -14,6 +14,10 @@ namespace CustomDoubleButtonRangeSlider
     [Activity(Label = "CustomDoubleButtonRangeSlider", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity, DoubleButtonRangeSliderChangeListener
     {
+        private TextView _leftButtonValue;
+        private TextView _rightButtonValue;
+        private TextView _rangeSliderId;
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -21,6 +25,10 @@ namespace CustomDoubleButtonRangeSlider
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
             var rangeSliderLayout = FindViewById<RelativeLayout>(Resource.Id.rangeSliderLayout);
+            this._leftButtonValue = FindViewById<TextView>(Resource.Id.textViewleftButtonValue);
+            this._rightButtonValue = FindViewById<TextView>(Resource.Id.textViewRightButtonValue);
+            this._rangeSliderId = FindViewById<TextView>(Resource.Id.textViewRangeSliderId);
+
             AddRangeSlidersToLayout(rangeSliderLayout);
         }
 
@@ -66,7 +74,7 @@ namespace CustomDoubleButtonRangeSlider
             rangeSliderLayoutParameters.Width = this.Resources.DisplayMetrics.WidthPixels;
             rangeSliderLayoutParameters.Height = 100;
 
-            rangeSlider.Id = id;
+            rangeSlider.RangeSliderId = id;
             rangeSlider.MinLeftButtonValue = minLeftButtonValue;
             rangeSlider.MinRightButtonValue = minRightButtonValue;
             rangeSlider.MaxRightButtonValue = maxRightButtonValue;
@@ -86,9 +94,11 @@ namespace CustomDoubleButtonRangeSlider
             return rangeSlider;
         }
 
-        public void SeekBarValueChanged(decimal leftButtonValue, int leftButtonX, decimal rightButtonValue, int rightButtontX)
+        public void SeekBarValueChanged( int id, decimal leftButtonValue, int leftButtonX, decimal rightButtonValue, int rightButtontX)
         {
-            //do something
+            this._rangeSliderId.Text = string.Format(" Range Slider Id = {0}", id);
+            this._leftButtonValue.Text = string.Format(" Left Button Value = {0}",  leftButtonValue > 0 ? leftButtonValue: 0);
+            this._rightButtonValue.Text = string.Format(" Right Button Value = {0}",  rightButtonValue > 0 ? rightButtonValue:0);
         }
         #region HELPERS
         private float Scale(float value, Android.Util.ComplexUnitType unit)
