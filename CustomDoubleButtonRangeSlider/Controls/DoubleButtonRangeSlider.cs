@@ -1,12 +1,12 @@
 // ***********************************************************************
-// Assembly         : iComfort3
+// Assembly         : nubis
 // Author           : homerolara
-// Created          : 02-01-2015
+// Created          : 09-01-2014
 //
 // Last Modified By : homerolara
-// Last Modified On : 02-05-2015
+// Last Modified On : 09-01-2014
 // ***********************************************************************
-// <copyright file="DoublebuttonRangeSlider.cs" company="">
+// <copyright file="DoublebuttonRangeSlider.cs" company="Nubis Uno">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
