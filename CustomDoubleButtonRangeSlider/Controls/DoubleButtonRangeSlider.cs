@@ -43,11 +43,8 @@ namespace CustomDoubleButtonRangeSlider.Controls
         private string _tag;
         private Bitmap _leftButtonImage = null;
         private Bitmap _rightButtonImage = null;
-        private Bitmap _leftButtonImageScaled = null;
-        private Bitmap _rightButtonImageScaled = null;
         private Bitmap _sliderBarActive = null;
         private Bitmap _sliderBarActiveScaled = null;
-        private bool _enabledSlider = true;
 
         private int _id = 0;
         private int _sliderMinValue = 0;
@@ -90,11 +87,6 @@ namespace CustomDoubleButtonRangeSlider.Controls
         {
             get { return _fullStep; }
             set { _fullStep = value; }
-        }
-        public bool EnabledSlider
-        {
-            get { return _enabledSlider; }
-            set { _enabledSlider = value; }
         }
 
         public RangeSliderMode SliderMode
@@ -239,11 +231,19 @@ namespace CustomDoubleButtonRangeSlider.Controls
             if (this._sliderBarActiveScaled == null)
                 this._sliderBarActiveScaled = Bitmap.CreateScaledBitmap(this._sliderBarActive, this.Width, 10, false);
 
-            //if (this.LeftButtonImage == null)
-            //    this._leftButtonImage = BitmapFactory.DecodeResource(Resources, Resource.Drawable.circle_red);
+            //default image incase non was provided 
+            if (this.LeftButtonImage == null)
+            {
+                var leftButtonImageTemp = BitmapFactory.DecodeResource(Resources, Resource.Drawable.circle_red);
+                this._leftButtonImage = Bitmap.CreateScaledBitmap(leftButtonImageTemp, leftButtonImageTemp.Width / 2, leftButtonImageTemp.Height / 2, false);
+            }
 
-            //if (this.RightButtonImage == null)
-            //    this._rightButtonImage = BitmapFactory.DecodeResource(Resources, Resource.Drawable.circle_blue);
+            //default image incase non was provided
+            if (this.RightButtonImage == null)
+            {
+                var rightButtonImageTemp = BitmapFactory.DecodeResource(Resources, Resource.Drawable.circle_blue);
+                this._rightButtonImage = Bitmap.CreateScaledBitmap(rightButtonImageTemp, rightButtonImageTemp.Width / 2, rightButtonImageTemp.Height / 2, false);
+            }
 
             if (!this._step.HasValue)
             {
@@ -382,21 +382,46 @@ namespace CustomDoubleButtonRangeSlider.Controls
             switch (me.Action)
             {
                 case MotionEventActions.Down:
-                    if (mx >= this._leftButtonX - this._leftButtonImage.Width && mx <= this._leftButtonX)
+                    switch (this._sliderMode)
                     {
-                        this._isLeftButtonBeingPressed = true;
-                        this._selectedButton = SelectedButton.LEFT;
-                        this._offset = mx - this._leftButtonX;
+                        case RangeSliderMode.DUALMODE:
+                            if (mx >= this._leftButtonX - this._leftButtonImage.Width && mx <= this._leftButtonX)
+                            {
+                                this._isLeftButtonBeingPressed = true;
+                                this._selectedButton = SelectedButton.LEFT;
+                                this._offset = mx - this._leftButtonX;
+                            }
+                            else if (mx >= this._rightButtonX && mx <= this._rightButtonX + this._rightButtonImage.Width)
+                            {
+                                this._isRightButtonBeingPressed = true;
+                                this._selectedButton = SelectedButton.RIGHT;
+                                this._offset = this._rightButtonX - mx;
+                            }
+                            break;
+                        case RangeSliderMode.LEFTMODEONLY:
+                            if (mx >= this._leftButtonX - this._leftButtonImage.Width && mx <= this._leftButtonX)
+                            {
+                                this._isLeftButtonBeingPressed = true;
+                                this._selectedButton = SelectedButton.LEFT;
+                                this._offset = mx - this._leftButtonX;
+                            }
+                            break;
+                        case RangeSliderMode.RIGHTMODEONLY:
+                            if (mx >= this._rightButtonX && mx <= this._rightButtonX + this._rightButtonImage.Width)
+                            {
+                                this._isRightButtonBeingPressed = true;
+                                this._selectedButton = SelectedButton.RIGHT;
+                                this._offset = this._rightButtonX - mx;
+                            }
+                            break;
                     }
-                    else if (mx >= this._rightButtonX && mx <= this._rightButtonX + this._rightButtonImage.Width)
-                    {
-                        this._isRightButtonBeingPressed = true;
-                        this._selectedButton = SelectedButton.RIGHT;
-                        this._offset = this._rightButtonX - mx;
-                    }
+                    
                     break;
-
                 case MotionEventActions.Move:
+
+                    //the correct button that is being pressed has already been determined
+                    //not capture that button's movement
+
                     if (this._selectedButton == SelectedButton.LEFT)
                     {
                         this._isLeftButtonBeingPressed = true;
@@ -413,6 +438,7 @@ namespace CustomDoubleButtonRangeSlider.Controls
                     break;
 
                 case MotionEventActions.Up:
+                    //reset and wait for the button press event
                     this._isRightButtonBeingPressed = false;
                     this._isLeftButtonBeingPressed = false;
                     this._selectedButton = SelectedButton.NONE;

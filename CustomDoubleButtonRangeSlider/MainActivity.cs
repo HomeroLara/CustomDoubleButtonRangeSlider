@@ -17,7 +17,8 @@ namespace CustomDoubleButtonRangeSlider
         private TextView _leftButtonValue;
         private TextView _rightButtonValue;
         private TextView _rangeSliderId;
-
+        private TextView _textViewLeftXPosition;
+        private TextView _textViewRightXPosition;
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -28,6 +29,8 @@ namespace CustomDoubleButtonRangeSlider
             this._leftButtonValue = FindViewById<TextView>(Resource.Id.textViewleftButtonValue);
             this._rightButtonValue = FindViewById<TextView>(Resource.Id.textViewRightButtonValue);
             this._rangeSliderId = FindViewById<TextView>(Resource.Id.textViewRangeSliderId);
+            this._textViewLeftXPosition = FindViewById<TextView>(Resource.Id.textViewLeftXPosition);
+            this._textViewRightXPosition = FindViewById<TextView>(Resource.Id.textViewRightXPosition);
 
             AddRangeSlidersToLayout(rangeSliderLayout);
         }
@@ -58,7 +61,7 @@ namespace CustomDoubleButtonRangeSlider
             rangeSliderTableLayout.AddView(tableRowRangeSliders);
 
             tableRowRangeSliders = new TableRow(this);
-            tableRowRangeSliders.AddView(CreateRangeSlider(3, 0, 27, 100, 0, 0, 31, 100, 0, false, RangeSliderMode.RIGHTMODEONLY, leftButtonImageScalesd, rightButtonImageScalesd));
+            tableRowRangeSliders.AddView(CreateRangeSlider(2, 0, 27, 100, 0, 0, 31, 100, 0, false, RangeSliderMode.RIGHTMODEONLY, leftButtonImageScalesd, rightButtonImageScalesd));
             rangeSliderTableLayout.AddView(tableRowRangeSliders);
 
             return rangeSliderTableLayout;
@@ -99,6 +102,8 @@ namespace CustomDoubleButtonRangeSlider
             this._rangeSliderId.Text = string.Format(" Range Slider Id = {0}", id);
             this._leftButtonValue.Text = string.Format(" Left Button Value = {0}",  leftButtonValue > 0 ? leftButtonValue: 0);
             this._rightButtonValue.Text = string.Format(" Right Button Value = {0}",  rightButtonValue > 0 ? rightButtonValue:0);
+            this._textViewLeftXPosition.Text = string.Format(" Left Button X Position Value = {0}", leftButtonX > 0 ? leftButtonX : 0);
+            this._textViewRightXPosition.Text = string.Format(" Right Button X Position Value = {0}", rightButtontX > 0 ? rightButtontX : 0);
         }
         #region HELPERS
         private float Scale(float value, Android.Util.ComplexUnitType unit)

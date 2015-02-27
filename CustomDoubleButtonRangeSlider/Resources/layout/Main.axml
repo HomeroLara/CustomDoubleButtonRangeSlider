@@ -27,5 +27,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="260dp"
             android:textColor="#ffffff" />
+        <TextView
+            android:id="@+id/textViewLeftXPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="290dp"
+            android:textColor="#ffffff" />
+        <TextView
+            android:id="@+id/textViewRightXPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="310dp"
+            android:textColor="#ffffff" />
     </RelativeLayout>
 </LinearLayout>
