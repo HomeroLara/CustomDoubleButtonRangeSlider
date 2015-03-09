@@ -497,8 +497,10 @@ namespace CustomDoubleButtonRangeSlider.Controls
                     if (this._rightButtonX > Width - this._rightButtonImage.Width)
                         this._rightButtonX = (Width - this._rightButtonImage.Width);
 
-                    if (this._rightButtonX <= this._deadBand + this._minwindow)
-                        this._rightButtonX = (this._deadBand + this._minwindow);
+                    //if (this._rightButtonX <= this._deadBand + this._minwindow)
+                    //    this._rightButtonX = (this._deadBand + this._minwindow);
+                    if (this._rightButtonX <= this._minwindow)
+                        this._rightButtonX = this._minwindow;
                 }
             }
             else if (this._selectedButton == SelectedButton.LEFT)
