@@ -48,10 +48,10 @@ namespace CustomDoubleButtonRangeSlider
             rangeSliderTableLayout.LayoutParameters = new ViewGroup.LayoutParams(this.Resources.DisplayMetrics.WidthPixels, this.Resources.DisplayMetrics.HeightPixels);
 
             var leftButtonImage = BitmapFactory.DecodeResource(Resources, Resource.Drawable.circle_red);
-            var leftButtonImageScalesd = Bitmap.CreateScaledBitmap(leftButtonImage, leftButtonImage.Width / 2, leftButtonImage.Height / 2, false);
+            var leftButtonImageScalesd = Bitmap.CreateScaledBitmap(leftButtonImage, leftButtonImage.Width / 4, leftButtonImage.Height / 4, false);
 
             var rightButtonImage = BitmapFactory.DecodeResource(Resources, Resource.Drawable.circle_blue);
-            var rightButtonImageScalesd = Bitmap.CreateScaledBitmap(rightButtonImage, rightButtonImage.Width / 2, rightButtonImage.Height / 2, false);
+            var rightButtonImageScalesd = Bitmap.CreateScaledBitmap(rightButtonImage, rightButtonImage.Width / 4, rightButtonImage.Height / 4, false);
 
             tableRowRangeSliders.AddView(CreateRangeSlider(0, 40, 70, 85, 80, 40, 81, 90, 60, true, RangeSliderMode.DUALMODE, leftButtonImageScalesd, rightButtonImageScalesd));
             rangeSliderTableLayout.AddView(tableRowRangeSliders);
