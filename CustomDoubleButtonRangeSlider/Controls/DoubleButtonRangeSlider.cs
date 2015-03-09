@@ -77,6 +77,8 @@ namespace CustomDoubleButtonRangeSlider.Controls
         private bool _isRightButtonBeingPressed = false;
 
         private int _screenWidth = 0;
+        private int _screenHeight = 0;
+        private int _control_center_y_position = 0;
         #endregion
 
         #region PUBLIC MEMBERS
@@ -269,6 +271,12 @@ namespace CustomDoubleButtonRangeSlider.Controls
                         break;
                 }
             }
+
+            if (_screenHeight == 0)
+            {
+                _screenHeight = this.Height;
+                _control_center_y_position = _screenHeight / 2;
+            }
         }
 
         public void DrawButtons()
@@ -287,53 +295,72 @@ namespace CustomDoubleButtonRangeSlider.Controls
                 this._rightButtonX = (int)(rightButtonStartValue * _screenWidth);
             }
 
-            this._canvas.DrawBitmap(this._sliderBarActiveScaled, 0, 55, new Paint() );
+            this._canvas.DrawBitmap(this._sliderBarActiveScaled, 0, _control_center_y_position, new Paint());
 
             var leftButtonValue = string.Empty;
             var rightButtonValue = string.Empty;
             float startingRightButtonTextX;
             float startingLeftButtonTextX;
+            var text_y_position = 0;
+            var left_y_position = 0;
+            var right_y_position = 0;
+
+            var bounds = new Android.Graphics.Rect();
 
             GetButtonValues();
 
             switch (this._sliderMode)
             {
                 case RangeSliderMode.RIGHTMODEONLY:
-                    this._canvas.DrawBitmap(this._rightButtonImage, this._rightButtonX, 0, this._paint);
+                    right_y_position = _control_center_y_position - (this._rightButtonImage.Height / 2);
+                    this._canvas.DrawBitmap(this._rightButtonImage, this._rightButtonX, right_y_position, this._paint);
 
                     //draw the right textView @ center of right button
                     startingRightButtonTextX = XRightButtonPosition(this._textPaint, this._rightButtonImage, this._rightButtonX);
-
                     rightButtonValue = string.Format("{0}{1}", this._rightButtonValue.ToString(), "\u00B0");
-                    this._canvas.DrawText(rightButtonValue, startingRightButtonTextX, Scale(20f, Android.Util.ComplexUnitType.Dip), this._textPaint);
+
+                    this._textPaint.GetTextBounds(rightButtonValue, 0, rightButtonValue.Length, bounds);
+                    text_y_position = _control_center_y_position + (bounds.Height() / 2);
+
+                    this._canvas.DrawText(rightButtonValue, startingRightButtonTextX, text_y_position, this._textPaint);
                     break;
 
                 case RangeSliderMode.LEFTMODEONLY:
-                    this._canvas.DrawBitmap(this._leftButtonImage, this._leftButtonX - this._leftButtonImage.Width, 0, this._paint);
+                    left_y_position = _control_center_y_position - (this._leftButtonImage.Height / 2);
+                    this._canvas.DrawBitmap(this._leftButtonImage, this._leftButtonX - this._leftButtonImage.Width, left_y_position, this._paint);
 
                     //draw the left textView @ center of left button
                     startingLeftButtonTextX = XLeftButtonPosition(this._textPaint, this._leftButtonImage, this._leftButtonX);
 
                     leftButtonValue = string.Format("{0}{1}", this._leftButtonValue.ToString(), "\u00B0");
-                    this._canvas.DrawText(leftButtonValue, startingLeftButtonTextX, Scale(20f, Android.Util.ComplexUnitType.Dip), this._textPaint);
+                    this._textPaint.GetTextBounds(leftButtonValue, 0, leftButtonValue.Length, bounds);
+                    text_y_position = _control_center_y_position + (bounds.Height() / 2);
+
+                    this._canvas.DrawText(leftButtonValue, startingLeftButtonTextX, text_y_position, this._textPaint);
                     break;
 
                 case RangeSliderMode.DUALMODE:
                 default:
-                    this._canvas.DrawBitmap(this._leftButtonImage, this._leftButtonX - this._leftButtonImage.Width, 0, this._paint);
-                    this._canvas.DrawBitmap(this._rightButtonImage, this._rightButtonX, 0, this._paint);
+                    left_y_position = _control_center_y_position - (this._leftButtonImage.Height / 2);
+                    right_y_position = _control_center_y_position - (this._rightButtonImage.Height / 2);
+
+                    this._canvas.DrawBitmap(this._leftButtonImage, this._leftButtonX - this._leftButtonImage.Width, left_y_position, this._paint);
+                    this._canvas.DrawBitmap(this._rightButtonImage, this._rightButtonX, right_y_position, this._paint);
 
                     leftButtonValue = string.Format("{0}{1}", this._leftButtonValue.ToString(), "\u00B0");
                     rightButtonValue = string.Format("{0}{1}", this._rightButtonValue.ToString(), "\u00B0");
 
                     //draw the left textView @ center of left button
+                    
+                    this._textPaint.GetTextBounds(leftButtonValue, 0, leftButtonValue.Length, bounds);
+                    text_y_position = _control_center_y_position + (bounds.Height() / 2);
+
                     startingLeftButtonTextX = XLeftButtonPosition(this._textPaint, this._leftButtonImage, this._leftButtonX);
-                    //this._canvas.DrawText(leftButtonValue, startingLeftButtonTextX, Scale(this._isLeftButtonBeingPressed ? 10f : 28f, Android.Util.ComplexUnitType.Dip), this._textPaint);
-                    this._canvas.DrawText(leftButtonValue, startingLeftButtonTextX, Scale(20f, Android.Util.ComplexUnitType.Dip), this._textPaint);
+                    this._canvas.DrawText(leftButtonValue, startingLeftButtonTextX, text_y_position, this._textPaint);
 
                     //draw the right textView @ center of right button
                     startingRightButtonTextX = XRightButtonPosition(this._textPaint, this._rightButtonImage, this._rightButtonX);
-                    this._canvas.DrawText(rightButtonValue, startingRightButtonTextX, Scale(20f, Android.Util.ComplexUnitType.Dip), this._textPaint);
+                    this._canvas.DrawText(rightButtonValue, startingRightButtonTextX, text_y_position, this._textPaint);
                     break;
             }
         }
